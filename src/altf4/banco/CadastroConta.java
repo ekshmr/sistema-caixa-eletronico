@@ -85,10 +85,6 @@ public class CadastroConta extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldSenha.setText("jPasswordField1");
-
-        jTextFieldConfirmaSenha.setText("jPasswordField2");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
