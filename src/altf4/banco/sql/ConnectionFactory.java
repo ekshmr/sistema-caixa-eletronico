@@ -13,7 +13,7 @@ public class ConnectionFactory {
     final static private String DRIVER = "com.mysql.cj.jdbc.Driver";
     final static private String URL = "jdbc:mysql://localhost:3306/banco";
     final static private String USER = "root";
-    final static private String PASS = "@Seahorse1";
+    final static private String PASS = "";
 
     public static Connection getDb(){
         try {
