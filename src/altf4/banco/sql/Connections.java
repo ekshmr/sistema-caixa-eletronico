@@ -43,7 +43,6 @@ public class Connections {
                 veruser = rs.getString("username");
             }
             if(vercpf.equals(getCPF)
-                ||verrg.equals(getRG)
                     ||veruser.equals(getLogin)){
                 
                 JOptionPane.showMessageDialog(null, "Erro no cadastro, usuário já existente.\nRealize o login!", "ERRO", JOptionPane.ERROR_MESSAGE, null);
