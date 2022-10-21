@@ -21,6 +21,7 @@ public class ConnectionFactory {
             return DriverManager.getConnection(URL, USER, PASS);
             
         } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println("ERRO DO MYSQL  " + ex);
             throw new RuntimeException("Erro na conexão MySQL");
         }
     }
