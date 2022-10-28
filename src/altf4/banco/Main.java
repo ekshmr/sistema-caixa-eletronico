@@ -1,14 +1,12 @@
 package altf4.banco;
 
-import javax.swing.JFrame;
+import altf4.banco.jFrames.jFrameLogin;
 
 public class Main {
     
     public static void main(String[] args) {
         
-        Login login = new Login();
-        login.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        login.setVisible(true);
-        
+        jFrameLogin jfl = new jFrameLogin();
+        jfl.setVisible(true);
     }
 }

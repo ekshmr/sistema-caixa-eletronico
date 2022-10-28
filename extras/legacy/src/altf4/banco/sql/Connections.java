@@ -15,26 +15,13 @@ import javax.swing.JOptionPane;
 
 public class Connections {
 
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
-    
     public boolean cadastro(String getName, String getSobrenome, String getCPF, String getNasc, String getRG, String getLogin, String getSenha){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
-        String vercpf = "", verrg = "", veruser = "", passCrypto = "";
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String vercpf = "", verrg = "", veruser = "";
         boolean sucess = false;
-        char passChar;
-        
-        for(int i = 0; i < getSenha.length(); i++){
-            
-            passChar = (char)getSenha.charAt(i);
-            passChar += i*(i+(i*2));
-            
-            passCrypto += passChar;
-        }
         
         try {
             ps = con.prepareStatement("call Cadastro(?,?,?,?,?,?,?);");
@@ -45,7 +32,7 @@ public class Connections {
             ps.setString(4, getNasc);
             ps.setDouble(5, Double.parseDouble(getRG));
             ps.setString(6, getLogin);
-            ps.setString(7, passCrypto);
+            ps.setString(7, getSenha);
             
             rs = ps.executeQuery("SELECT cpf,rg,username FROM user");
             
@@ -56,7 +43,6 @@ public class Connections {
                 veruser = rs.getString("username");
             }
             if(vercpf.equals(getCPF)
-                ||verrg.equals(getRG)
                     ||veruser.equals(getLogin)){
                 
                 JOptionPane.showMessageDialog(null, "Erro no cadastro, usuário já existente.\nRealize o login!", "ERRO", JOptionPane.ERROR_MESSAGE, null);
@@ -75,10 +61,10 @@ public class Connections {
         return sucess;
     }
     
-    public void transferencia(String getSID, String getDID, double valor){
+        public void transferencia(String getSID, String getDID, double valor){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
         
         try {
             ps = con.prepareStatement("call Transferencia(?,?,?);");
@@ -99,8 +85,8 @@ public class Connections {
         
     public void sacar(String getSID, double valor){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
         
         try {
             ps = con.prepareStatement("call Saque(?,?);");
@@ -118,8 +104,8 @@ public class Connections {
     
     public void depositar(String getSID, double valor){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
         
         try {
             ps = con.prepareStatement("call Deposito(?,?);");
@@ -137,8 +123,8 @@ public class Connections {
     
     public void retirar(String getSID, double valor){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
         
         try {
             ps = con.prepareStatement("call Retirada(?,?);");
@@ -157,8 +143,8 @@ public class Connections {
     
     public void setSenha(String senha){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
         
         try {
             ps = con.prepareStatement("UPDATE login join user on login.username=user.username SET login.senha = ? WHERE user.id = "+UserInfo.getUserID()+";");
@@ -176,10 +162,11 @@ public class Connections {
     
     public boolean login(String login, String pass){
         
-       con = ConnectionFactory.getDb();
-       ps = null;
-       rs = null;
-       String nome, senha, passUncrypto = "";
+       Connection con = ConnectionFactory.getDb();
+       PreparedStatement ps = null;
+       ResultSet rs = null;
+       String nome;
+       String senha;
        int id;
        boolean passed = false;
        
@@ -193,17 +180,7 @@ public class Connections {
                 nome = rs.getString("user.username");
                 senha = rs.getString("login.senha");
                 
-                char passChar;
-        
-                for(int i = 0; i < senha.length(); i++){
-
-                    passChar = (char)senha.charAt(i);
-                    passChar -= i*(i+(i*2));
-
-                    passUncrypto += passChar;
-                }
-                
-                if(login.equals(nome) && pass.equals(passUncrypto)){
+                if(login.equals(nome) && pass.equals(senha)){
                     passed = true;
                     UserInfo.setUserID(String.valueOf(id));
 
@@ -228,9 +205,9 @@ public class Connections {
     public double getSaldo(){
         
         double saldo = 0;
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             ps = con.prepareStatement("SELECT saldo FROM user WHERE id = " + UserInfo.getUserID());
@@ -250,9 +227,9 @@ public class Connections {
     public String getSenha(){
         
         String senha = "";
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             ps = con.prepareStatement("SELECT login.senha FROM login join user on login.username = user.username WHERE user.id = " + UserInfo.getUserID());
@@ -271,10 +248,10 @@ public class Connections {
     
     public ArrayList<Transferencias> getSendTransfers(){
         
-        con = ConnectionFactory.getDb();
+        Connection con = ConnectionFactory.getDb();
         
-        ps = null;
-        rs = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         ArrayList<Transferencias> t = new ArrayList<>();
         double valor;
         int destino, id;
@@ -309,10 +286,10 @@ public class Connections {
     
     public ArrayList<Acessos> getAcessos(){
         
-        con = ConnectionFactory.getDb();
+        Connection con = ConnectionFactory.getDb();
         
-        ps = null;
-        rs = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         ArrayList<Acessos> a = new ArrayList<>();
         int id;
         String data;
@@ -341,9 +318,9 @@ public class Connections {
     
     public ArrayList<Transferencias> getLastSendTransfer(){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         ArrayList<Transferencias> t = new ArrayList<>();
         Transferencias tr = new Transferencias();
         double valor;
@@ -375,9 +352,9 @@ public class Connections {
     
     public ArrayList<Transferencias> getRecivedTransfers(){
         
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         ArrayList<Transferencias> t = new ArrayList<>();
         double valor;
         int destino, id;
@@ -413,9 +390,9 @@ public class Connections {
     public double getLiberado(){
         
         double saldo = 0;
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             ps = con.prepareStatement("SELECT retirada FROM user WHERE id = " + UserInfo.getUserID());
@@ -435,9 +412,9 @@ public class Connections {
     public String getNome(){
         
         String nome = "";
-        con = ConnectionFactory.getDb();
-        ps = null;
-        rs = null;
+        Connection con = ConnectionFactory.getDb();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             ps = con.prepareStatement("SELECT nome, sobrenome FROM user WHERE id = " + UserInfo.getUserID());
